@@ -97,13 +97,42 @@ class RGBA {
     }
 }
 
+class ImageModel {
+    constructor(heightValue, widthValue, pixelGridValue) {
+        this.height = heightValue;
+        this.width = widthValue;
 
+        if (pixelGridValue) {
+            this.pixelGrid = pixelGridValue;
+        }
+        else {
+            this.pixelGrid = initializePixelGrid(heightValue);
+        }
+    }
+}
+
+var imageModel = new ImageModel(300, 400);
+
+function verticalMirror(imageModel) {
+
+    var mirrorImageModel = new ImageModel(imageModel.height, imageModel.width);
+
+    for (var y = 0; y < imageModel.height; y++) {
+        for (var x = 0; x < imageModel.width / 2; x++) {
+            var mirroredIndex = imageModel.width - 1 - x;
+            mirrorImageModel.pixelGrid[y][x] = imageModel.pixelGrid[y][mirroredIndex];
+            mirrorImageModel.pixelGrid[y][mirroredIndex] = imageModel.pixelGrid[y][x];
+        }
+    }
+
+    return mirrorImageModel;
+}
 // class definitions here
 
 $(document).ready(function() {
     var img = new Image();
     img.src = "img/cat.jpg";
 
-
-
+    var cat = ImageUtils.fromImgSrc("img/cat.jpg");
+    ImageUtils.drawImageModel(verticalMirror(cat));
 });
